@@ -1,11 +1,17 @@
-import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader } from "@/components/ui/sidebar";
+import { Sidebar, SidebarContent, SidebarFooter, SidebarGroup, SidebarHeader, SidebarMenu } from "@/components/ui/sidebar";
 
 
 const RootSideBar = () => {
   return (
     <Sidebar>
         <SidebarHeader></SidebarHeader>
-        <SidebarContent></SidebarContent>
+        <SidebarContent>
+          <SidebarGroup>
+            <SidebarMenu>
+              
+            </SidebarMenu>
+          </SidebarGroup>
+        </SidebarContent>
         <SidebarFooter></SidebarFooter>
     </Sidebar>
   );

@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { OpenFile } from "../types";
+import type { OpenFile } from "../types";
 
 type FileStore = {
   openFiles: OpenFile[];
