@@ -47,6 +47,27 @@ Dark mode is implemented via CSS custom properties (oklch color space) in `src/i
 - Always import lucide icons using the `Icon` suffix (e.g. `CheckIcon`, `SunIcon`) to make it obvious the import is an icon.
 - Do not add classNames that are already handled by the component's defaults or by a parent component's styling.
 
+### Coding conventions
+
+- Always define function parameters as a single destructured object, with optional params defaulted inline. This keeps call sites stable when new params are added later.
+  ```ts
+  // Preferred
+  function foo({ a, b = "default" }: { a: string; b?: string }): string { ... }
+
+  // Avoid
+  function foo(a: string, b = "default"): string { ... }
+  ```
+
+- Always define event handlers as named functions before the component's `return`, prefixed with `handle` + the purpose (e.g. `handleSelectFile`, `handleCloseFile`). Never write inline arrow functions directly in JSX event props. This makes intent readable by name without having to read the implementation.
+  ```tsx
+  // Preferred
+  const handleSave = () => save(file);
+  return <Button onClick={handleSave}>Save</Button>;
+
+  // Avoid
+  return <Button onClick={() => save(file)}>Save</Button>;
+  ```
+
 ### shadcn Components
 
 The repo uses the shadcn component pattern (`components.json` config present). New shadcn components can be added via the shadcn CLI. See `.agents/skills/shadcn/` for the local skill definition.
