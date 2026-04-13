@@ -15,7 +15,7 @@ const RootLayout: React.FC<Props> = ({ children }) => {
         <TooltipProvider>
           <SidebarProvider>
             <RootSideBar />
-            <main className="w-[calc(100%-var(--sidebar-width))]">
+            <main className="flex-1">
               <RootMenuBar />
               {children}
             </main>
