@@ -13,6 +13,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
+import { focusTextarea } from "@/components/common/focusable-textarea";
 
 const RootSideBar = () => {
   const openFiles = useFileStore((s) => s.openFiles);
@@ -20,7 +21,10 @@ const RootSideBar = () => {
   const setActiveFile = useFileStore((s) => s.setActiveFile);
   const closeFile = useFileStore((s) => s.closeFile);
 
-  const handleSelectFile = (id: string) => () => setActiveFile(id);
+  const handleSelectFile = (id: string) => () => {
+    setActiveFile(id);
+    focusTextarea();
+  };
 
   const handleCloseFile = (file: OpenFile) => () => {
     if (file.isDirty) {
@@ -30,6 +34,7 @@ const RootSideBar = () => {
       if (!confirmed) return;
     }
     closeFile(file.id);
+    focusTextarea();
   };
 
   return (

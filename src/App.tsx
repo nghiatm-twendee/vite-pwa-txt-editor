@@ -1,5 +1,5 @@
 import NoFileSelected from "./components/common/no-file-selected.tsx";
-import { Textarea } from "./components/ui/textarea.tsx";
+import FocusableTextarea from "./components/common/focusable-textarea.tsx";
 import PWABadge from "./PWABadge.tsx";
 import { useFileStore } from "./store/app-file-state.store.ts";
 import { useShortcuts } from "./hooks/use-shortcuts.ts";
@@ -11,13 +11,17 @@ function App() {
 
   const activeFile = openFiles.find((f) => f.id === activeFileId);
 
+  const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    if (activeFile) updateContent(activeFile.id, e.target.value);
+  };
+
   return (
     <>
       {activeFileId && activeFile ? (
-        <Textarea
+        <FocusableTextarea
           className="h-[calc(100dvh-var(--spacing)*9)] w-full resize-none"
           value={activeFile.content}
-          onChange={(e) => updateContent(activeFile.id, e.target.value)}
+          onChange={handleChange}
         />
       ) : (
         <NoFileSelected />

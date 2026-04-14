@@ -3,6 +3,7 @@ import { toast } from "sonner";
 import { saveFileAs } from "@/service/txt-file";
 import { useFileStore } from "@/store/app-file-state.store";
 import { getErrorMessage } from "@/lib/error";
+import { focusTextarea } from "@/components/common/focusable-textarea";
 
 type SaveFileAsVars = {
   id: string;
@@ -21,6 +22,7 @@ export function useSaveFileAs() {
       updateHandleName(id, handle, handle.name);
       markClean(id);
       toast.success(`"${handle.name}" saved`);
+      focusTextarea();
     },
     onError: (error) => {
       if (error instanceof DOMException && error.name === "AbortError") return;
