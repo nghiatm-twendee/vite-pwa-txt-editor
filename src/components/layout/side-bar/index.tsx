@@ -9,10 +9,10 @@ import {
   SidebarHeader,
   SidebarMenu,
   SidebarMenuAction,
-  SidebarMenuBadge,
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
+import { cn } from "@/lib/utils";
 import { focusTextarea } from "@/components/common/focusable-textarea";
 
 const RootSideBar = () => {
@@ -50,18 +50,18 @@ const RootSideBar = () => {
                   title={file.name}
                   onClick={handleSelectFile(file.id)}
                 >
+                  <CircleIcon
+                    className={cn("fill-current", !file.isDirty && "opacity-0")}
+                  />
                   <span>{file.name}</span>
+                  {file.isDirty && (
+                    <span className="sr-only">Unsaved changes</span>
+                  )}
                 </SidebarMenuButton>
                 <SidebarMenuAction showOnHover onClick={handleCloseFile(file)}>
                   <XIcon />
                   <span className="sr-only">Remove</span>
                 </SidebarMenuAction>
-                {file.isDirty && (
-                  <SidebarMenuBadge className="group-hover/menu-item:hidden">
-                    <CircleIcon className="size-2 fill-current" />
-                    <span className="sr-only">Unsaved changes</span>
-                  </SidebarMenuBadge>
-                )}
               </SidebarMenuItem>
             ))}
           </SidebarMenu>
