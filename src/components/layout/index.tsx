@@ -5,7 +5,6 @@ import { TooltipProvider } from "../ui/tooltip";
 import RootMenuBar from "./menu-bar";
 import RootSideBar from "./side-bar";
 import { Toaster } from "../ui/sonner";
-
 interface Props {
   children?: React.ReactNode;
 }
@@ -24,7 +23,7 @@ const RootLayout: React.FC<Props> = ({ children }) => {
                 <RootMenuBar />
                 {children}
               </main>
-              <Toaster />
+              <Toaster richColors />
             </SidebarProvider>
           </TooltipProvider>
         </ThemeProvider>

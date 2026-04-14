@@ -21,7 +21,7 @@ This is a **PWA text editor** built with React 19 + TypeScript + Vite. The app c
 
 - `vite.config.ts` — Vite + TailwindCSS + VitePWA plugin config. Path alias `@/` maps to `./src/`.
 - `src/main.tsx` — Entry point; wraps `<App>` in `<RootLayout>` which composes all providers.
-- `src/App.tsx` — Root component; currently minimal, renders `<PWABadge>`.
+- `src/App.tsx` — Root component; renders the active file's textarea editor or a "no file selected" fallback, plus `<PWABadge>`.
 - `src/components/layout/index.tsx` — `RootLayout` composes `ThemeProvider`, `TooltipProvider`, `SidebarProvider`, `RootSideBar`, and `RootMenuBar` around main content.
 
 ### Component Layers
@@ -29,10 +29,14 @@ This is a **PWA text editor** built with React 19 + TypeScript + Vite. The app c
 | Layer | Path | Notes |
 |---|---|---|
 | Layout | `src/components/layout/` | `RootLayout`, `menu-bar/`, `side-bar/` |
+| Common | `src/components/common/` | Shared display components (e.g. `no-file-selected.tsx`) |
 | Providers | `src/components/provider/theme/` | `ThemeProvider` + `useTheme()` hook; persists to `localStorage` |
 | UI primitives | `src/components/ui/` | Headless Base UI React + CVA variants + Tailwind |
-| Hooks | `src/hooks/` | `use-mobile.ts` (768px breakpoint) |
-| Utils | `src/lib/utils.ts` | `cn()` — clsx + tailwind-merge helper |
+| Hooks | `src/hooks/` | `use-mobile.ts` (768px breakpoint), `use-new-file.ts`, `use-open-file.ts`, `use-save-file.ts`, `use-save-file-as.ts` |
+| Store | `src/store/` | Zustand store (`app-file-state.store.ts`) — open files, active file, content, dirty flags |
+| Service | `src/service/` | `txt-file.ts` — File System Access API I/O logic |
+| Types | `src/types/` | Shared TypeScript types (`OpenFile`, `AppState`) |
+| Utils | `src/lib/` | `utils.ts` — `cn()` clsx + tailwind-merge helper; `error.ts` — shared error utilities |
 
 ### UI Component Pattern
 
