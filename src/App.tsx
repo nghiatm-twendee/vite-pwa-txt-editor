@@ -3,9 +3,11 @@ import FocusableTextarea from "./components/common/focusable-textarea.tsx";
 import PWABadge from "./PWABadge.tsx";
 import { useFileStore } from "./store/app-file-state.store.ts";
 import { useShortcuts } from "./hooks/use-shortcuts.ts";
+import { useBeforeUnload } from "./hooks/use-before-unload.ts";
 
 function App() {
   useShortcuts();
+  useBeforeUnload();
 
   const { openFiles, activeFileId, updateContent } = useFileStore();
 
