@@ -5,6 +5,7 @@ import { useOpenFile } from "./use-open-file";
 import { useSaveFile } from "./use-save-file";
 import { useSaveFileAs } from "./use-save-file-as";
 import { useCloseFile } from "./use-close-file";
+import { useNavigateFile } from "./use-navigate-file";
 
 export const FileAction = {
   New: "new",
@@ -12,6 +13,8 @@ export const FileAction = {
   Save: "save",
   SaveAs: "saveAs",
   Close: "close",
+  PrevFile: "prevFile",
+  NextFile: "nextFile",
 } as const;
 
 export type FileAction = (typeof FileAction)[keyof typeof FileAction];
@@ -22,6 +25,8 @@ const ACTION_HOTKEYS: Record<FileAction, string> = {
   [FileAction.Save]: "mod+s",
   [FileAction.SaveAs]: "mod+shift+s",
   [FileAction.Close]: "alt+w",
+  [FileAction.PrevFile]: "alt+up",
+  [FileAction.NextFile]: "alt+down",
 };
 
 function getDisplayKey(part: string): string {
@@ -31,6 +36,8 @@ function getDisplayKey(part: string): string {
   if (part === "alt") return isMac ? "⌥" : "Alt";
   if (part === "ctrl") return "Ctrl";
   if (part === "meta") return isMac ? "⌘" : "⊞";
+  if (part === "up") return "↑";
+  if (part === "down") return "↓";
   return part.toUpperCase();
 }
 
@@ -44,6 +51,7 @@ export function useShortcuts() {
   const saveFileMutation = useSaveFile();
   const saveFileAsMutation = useSaveFileAs();
   const closeFile = useCloseFile();
+  const { navigatePrev, navigateNext } = useNavigateFile();
 
   const openFiles = useFileStore((s) => s.openFiles);
   const activeFileId = useFileStore((s) => s.activeFileId);
@@ -76,4 +84,6 @@ export function useShortcuts() {
     [activeFile],
   );
   useHotkeys(ACTION_HOTKEYS[FileAction.Close], () => closeFile(), opts);
+  useHotkeys(ACTION_HOTKEYS[FileAction.PrevFile], () => navigatePrev(), opts, [openFiles, activeFileId]);
+  useHotkeys(ACTION_HOTKEYS[FileAction.NextFile], () => navigateNext(), opts, [openFiles, activeFileId]);
 }

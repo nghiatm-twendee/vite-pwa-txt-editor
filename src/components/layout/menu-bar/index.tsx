@@ -4,6 +4,7 @@ import {
   MenubarContent,
   MenubarItem,
   MenubarMenu,
+  MenubarSeparator,
   MenubarShortcut,
   MenubarTrigger,
 } from "@/components/ui/menubar";
@@ -14,7 +15,17 @@ import { useOpenFile } from "@/hooks/use-open-file";
 import { useSaveFile } from "@/hooks/use-save-file";
 import { useSaveFileAs } from "@/hooks/use-save-file-as";
 import { useCloseFile } from "@/hooks/use-close-file";
+import { useNavigateFile } from "@/hooks/use-navigate-file";
 import { useFileStore } from "@/store/app-file-state.store";
+import {
+  ChevronUpIcon,
+  ChevronDownIcon,
+  FilePlusIcon,
+  FolderOpenIcon,
+  HardDriveDownloadIcon,
+  SaveIcon,
+  XIcon,
+} from "lucide-react";
 
 const RootMenuBar = () => {
   const newFile = useNewFile();
@@ -22,10 +33,12 @@ const RootMenuBar = () => {
   const saveFileMutation = useSaveFile();
   const saveFileAsMutation = useSaveFileAs();
   const closeFile = useCloseFile();
+  const { navigatePrev, navigateNext } = useNavigateFile();
 
   const openFiles = useFileStore((s) => s.openFiles);
   const activeFileId = useFileStore((s) => s.activeFileId);
   const activeFile = openFiles.find((f) => f.id === activeFileId) ?? null;
+  const canNavigate = openFiles.length >= 2;
 
   const handleNew = () => newFile();
   const handleOpen = () => openFileMutation.mutate();
@@ -42,6 +55,8 @@ const RootMenuBar = () => {
     saveFileAsMutation.mutate({ id: activeFile.id, content: activeFile.content, suggestedName: activeFile.name });
   };
   const handleClose = () => closeFile();
+  const handlePrev = () => navigatePrev();
+  const handleNext = () => navigateNext();
 
   return (
     <Menubar>
@@ -49,32 +64,41 @@ const RootMenuBar = () => {
       <ModeToggle />
       <MenubarMenu>
         <MenubarTrigger>File</MenubarTrigger>
-        <MenubarContent className="min-w-48">
+        <MenubarContent className="min-w-64">
           <MenubarItem onClick={handleNew}>
-            New
+            <FilePlusIcon /> New
             <MenubarShortcut>{getShortcutDisplay({ action: FileAction.New }).join("+")}</MenubarShortcut>
           </MenubarItem>
           <MenubarItem disabled={openFileMutation.isPending} onClick={handleOpen}>
-            Open
+            <FolderOpenIcon /> Open
             <MenubarShortcut>{getShortcutDisplay({ action: FileAction.Open }).join("+")}</MenubarShortcut>
           </MenubarItem>
           <MenubarItem
             disabled={!activeFile || saveFileMutation.isPending || saveFileAsMutation.isPending}
             onClick={handleSave}
           >
-            Save
+            <SaveIcon /> Save
             <MenubarShortcut>{getShortcutDisplay({ action: FileAction.Save }).join("+")}</MenubarShortcut>
           </MenubarItem>
           <MenubarItem
             disabled={!activeFile || saveFileAsMutation.isPending}
             onClick={handleSaveAs}
           >
-            Save as
+            <HardDriveDownloadIcon /> Save as
             <MenubarShortcut>{getShortcutDisplay({ action: FileAction.SaveAs }).join("+")}</MenubarShortcut>
           </MenubarItem>
           <MenubarItem disabled={!activeFile} onClick={handleClose}>
-            Close
+            <XIcon /> Close
             <MenubarShortcut>{getShortcutDisplay({ action: FileAction.Close }).join("+")}</MenubarShortcut>
+          </MenubarItem>
+          <MenubarSeparator />
+          <MenubarItem disabled={!canNavigate} onClick={handlePrev}>
+            <ChevronUpIcon /> Previous File
+            <MenubarShortcut>{getShortcutDisplay({ action: FileAction.PrevFile }).join("+")}</MenubarShortcut>
+          </MenubarItem>
+          <MenubarItem disabled={!canNavigate} onClick={handleNext}>
+            <ChevronDownIcon /> Next File
+            <MenubarShortcut>{getShortcutDisplay({ action: FileAction.NextFile }).join("+")}</MenubarShortcut>
           </MenubarItem>
         </MenubarContent>
       </MenubarMenu>
