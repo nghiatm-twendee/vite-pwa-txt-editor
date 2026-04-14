@@ -19,9 +19,9 @@ export default defineConfig({
       },
 
       manifest: {
-        name: "Vite PWA txt Editor",
-        short_name: "Vite txt",
-        description: "a Vite PWA txt editor app",
+        name: "Txtpad",
+        short_name: "Txtpad",
+        description: "A lightweight, offline-capable plain text editor. Open, edit, and save .txt files directly in your browser.",
         theme_color: "#ffffff",
       },
 

@@ -1,73 +1,83 @@
-# React + TypeScript + Vite
+# Txtpad
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A lightweight, offline-capable plain text editor that runs entirely in the browser. Built as an MVP to explore [Vite PWA](https://vite-pwa-org.netlify.app/) and [Claude Code](https://claude.ai/code).
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Purpose
 
-## React Compiler
+Two goals drove this project:
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+1. **Try out Vite PWA** on a genuinely local-first web app — no backend, no cloud sync, no account. The File System Access API means the browser reads and writes your actual files on disk.
+2. **Learn Claude Code** — the entire feature set was built collaboratively with Claude Code as an AI pair-programmer.
 
-## Expanding the ESLint configuration
+---
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## Features
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+- **Open, create, save, and close `.txt` files** using the native [File System Access API](https://developer.mozilla.org/en-US/docs/Web/API/File_System_API) — no upload, no server round-trip
+- **Multiple files open at once** with a collapsible sidebar for switching between them
+- **Unsaved-changes indicator** — a small dot badge marks dirty files; the sidebar prompts for confirmation before closing them
+- **Keyboard shortcuts** for every action:
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+  | Action    | Shortcut           |
+  |-----------|--------------------|
+  | New file  | `Alt+N`            |
+  | Open file | `Ctrl/⌘+O`         |
+  | Save      | `Ctrl/⌘+S`         |
+  | Save As   | `Ctrl/⌘+Shift+S`   |
+  | Close     | `Alt+W`            |
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+- **Auto-focus textarea** after every file action so keyboard-only users never have to reach for the mouse
+- **Installable PWA** — add it to your home screen or desktop; it works fully offline via a Workbox service worker
+- **Dark / light / system theme** toggle persisted to `localStorage`
+- **Update toast** — users are prompted when a new version of the service worker is available (`registerType: "prompt"`)
+
+---
+
+## Interesting tidbits
+
+- **`Alt+W` instead of `Ctrl+W`** — `Ctrl/⌘+W` is browser-reserved and closes the tab even with `preventDefault`. `Alt+W` follows the same pattern as `Alt+N` (New) for non-overridable browser shortcuts.
+- **Singleton ref for focus** — a module-level `{ current: HTMLTextAreaElement | null }` object in `focusable-textarea.tsx` lets hooks and sidebar components call `focusTextarea()` without threading refs through the component tree. `requestAnimationFrame` defers the focus call past the React render that mounts the textarea, handling new-file and open-file timing edge cases cleanly.
+- **No test suite yet** — the project is an MVP / learning sandbox. The type system and a manual smoke-test are the quality gates for now.
+
+---
+
+## Stack
+
+| Concern | Package |
+|---|---|
+| Framework | [React 19](https://react.dev) + [TypeScript](https://www.typescriptlang.org) |
+| Build & dev server | [Vite](https://vite.dev) |
+| PWA / service worker | [vite-plugin-pwa](https://vite-pwa-org.netlify.app) (Workbox) |
+| Styling | [Tailwind CSS v4](https://tailwindcss.com) |
+| Headless UI | [Base UI React](https://base-ui.com) |
+| Component variants | [CVA](https://cva.style) + `cn()` (clsx + tailwind-merge) |
+| State management | [Zustand](https://zustand.docs.pmnd.rs) |
+| Async mutations | [TanStack Query v5](https://tanstack.com/query) |
+| Keyboard shortcuts | [react-hotkeys-hook](https://github.com/JohannesKlauss/react-hotkeys-hook) |
+| Icons | [Lucide React](https://lucide.dev) |
+| Toasts | [Sonner](https://sonner.emilkowal.ski) |
+
+---
+
+## Getting started
+
+```bash
+# Install dependencies
+npm install
+
+# Start the dev server with HMR
+npm run dev
+
+# Type-check and build for production
+npm run build
+
+# Preview the production build locally
+npm run preview
+
+# Lint the codebase
+npm run lint
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+The dev server starts at `http://localhost:5173` by default. PWA features (service worker, offline) are only active in the production build — run `npm run build && npm run preview` to test them.
