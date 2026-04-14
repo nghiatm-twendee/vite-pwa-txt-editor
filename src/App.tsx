@@ -1,7 +1,8 @@
-import FocusableTextarea from "./components/common/focusable-textarea.tsx";
 import NoFileSelected from "./components/common/no-file-selected.tsx";
-import { useShortcuts } from "./hooks/use-shortcuts.ts";
+import FocusableTextarea from "./components/common/focusable-textarea.tsx";
+import PWABadge from "./PWABadge.tsx";
 import { useFileStore } from "./store/app-file-state.store.ts";
+import { useShortcuts } from "./hooks/use-shortcuts.ts";
 
 function App() {
   useShortcuts();
@@ -25,6 +26,7 @@ function App() {
       ) : (
         <NoFileSelected />
       )}
+      <PWABadge />
     </>
   );
 }
