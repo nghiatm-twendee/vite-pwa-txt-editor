@@ -13,6 +13,7 @@ import { useNewFile } from "@/hooks/use-new-file";
 import { useOpenFile } from "@/hooks/use-open-file";
 import { useSaveFile } from "@/hooks/use-save-file";
 import { useSaveFileAs } from "@/hooks/use-save-file-as";
+import { useCloseFile } from "@/hooks/use-close-file";
 import { useFileStore } from "@/store/app-file-state.store";
 
 const RootMenuBar = () => {
@@ -20,6 +21,7 @@ const RootMenuBar = () => {
   const openFileMutation = useOpenFile();
   const saveFileMutation = useSaveFile();
   const saveFileAsMutation = useSaveFileAs();
+  const closeFile = useCloseFile();
 
   const openFiles = useFileStore((s) => s.openFiles);
   const activeFileId = useFileStore((s) => s.activeFileId);
@@ -39,6 +41,7 @@ const RootMenuBar = () => {
     if (!activeFile) return;
     saveFileAsMutation.mutate({ id: activeFile.id, content: activeFile.content, suggestedName: activeFile.name });
   };
+  const handleClose = () => closeFile();
 
   return (
     <Menubar>
@@ -68,6 +71,10 @@ const RootMenuBar = () => {
           >
             Save as
             <MenubarShortcut>{getShortcutDisplay({ action: FileAction.SaveAs }).join("+")}</MenubarShortcut>
+          </MenubarItem>
+          <MenubarItem disabled={!activeFile} onClick={handleClose}>
+            Close
+            <MenubarShortcut>{getShortcutDisplay({ action: FileAction.Close }).join("+")}</MenubarShortcut>
           </MenubarItem>
         </MenubarContent>
       </MenubarMenu>

@@ -4,12 +4,14 @@ import { useNewFile } from "./use-new-file";
 import { useOpenFile } from "./use-open-file";
 import { useSaveFile } from "./use-save-file";
 import { useSaveFileAs } from "./use-save-file-as";
+import { useCloseFile } from "./use-close-file";
 
 export const FileAction = {
   New: "new",
   Open: "open",
   Save: "save",
   SaveAs: "saveAs",
+  Close: "close",
 } as const;
 
 export type FileAction = (typeof FileAction)[keyof typeof FileAction];
@@ -19,6 +21,7 @@ const ACTION_HOTKEYS: Record<FileAction, string> = {
   [FileAction.Open]: "mod+o",
   [FileAction.Save]: "mod+s",
   [FileAction.SaveAs]: "mod+shift+s",
+  [FileAction.Close]: "alt+w",
 };
 
 function getDisplayKey(part: string): string {
@@ -40,6 +43,7 @@ export function useShortcuts() {
   const openFileMutation = useOpenFile();
   const saveFileMutation = useSaveFile();
   const saveFileAsMutation = useSaveFileAs();
+  const closeFile = useCloseFile();
 
   const openFiles = useFileStore((s) => s.openFiles);
   const activeFileId = useFileStore((s) => s.activeFileId);
@@ -71,4 +75,5 @@ export function useShortcuts() {
     opts,
     [activeFile],
   );
+  useHotkeys(ACTION_HOTKEYS[FileAction.Close], () => closeFile(), opts);
 }
