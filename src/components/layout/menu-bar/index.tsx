@@ -20,6 +20,7 @@ import { useFileStore } from "@/store/app-file-state.store";
 import {
   ChevronUpIcon,
   ChevronDownIcon,
+  CircleIcon,
   FilePlusIcon,
   FolderOpenIcon,
   HardDriveDownloadIcon,
@@ -102,6 +103,20 @@ const RootMenuBar = () => {
           </MenubarItem>
         </MenubarContent>
       </MenubarMenu>
+      {activeFile && (
+        <span
+          className="flex flex-1 min-w-0 items-center gap-1 px-1 md:sr-only"
+          title={activeFile.name}
+        >
+          <span className="truncate text-sm">{activeFile.name}</span>
+          {activeFile.isDirty && (
+            <>
+              <CircleIcon className="size-2 shrink-0 fill-current" />
+              <span className="sr-only">Unsaved changes</span>
+            </>
+          )}
+        </span>
+      )}
     </Menubar>
   );
 };

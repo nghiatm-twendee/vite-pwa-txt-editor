@@ -47,9 +47,10 @@ const RootSideBar = () => {
               <SidebarMenuItem key={file.id}>
                 <SidebarMenuButton
                   isActive={file.id === activeFileId}
+                  title={file.name}
                   onClick={handleSelectFile(file.id)}
                 >
-                  {file.name}
+                  <span>{file.name}</span>
                 </SidebarMenuButton>
                 <SidebarMenuAction showOnHover onClick={handleCloseFile(file)}>
                   <XIcon />
