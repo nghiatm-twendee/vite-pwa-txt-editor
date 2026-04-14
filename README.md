@@ -20,13 +20,15 @@ Two goals drove this project:
 - **Unsaved-changes indicator** — a small dot badge marks dirty files; the sidebar prompts for confirmation before closing them
 - **Keyboard shortcuts** for every action:
 
-  | Action    | Shortcut           |
-  |-----------|--------------------|
-  | New file  | `Alt+N`            |
-  | Open file | `Ctrl/⌘+O`         |
-  | Save      | `Ctrl/⌘+S`         |
-  | Save As   | `Ctrl/⌘+Shift+S`   |
-  | Close     | `Alt+W`            |
+  | Action        | Shortcut           |
+  |---------------|--------------------|
+  | New file      | `Alt+N`            |
+  | Open file     | `Ctrl/⌘+O`         |
+  | Save          | `Ctrl/⌘+S`         |
+  | Save As       | `Ctrl/⌘+Shift+S`   |
+  | Close         | `Alt+W`            |
+  | Previous file | `Alt+↑`            |
+  | Next file     | `Alt+↓`            |
 
 - **Auto-focus textarea** after every file action so keyboard-only users never have to reach for the mouse
 - **Installable PWA** — add it to your home screen or desktop; it works fully offline via a Workbox service worker
