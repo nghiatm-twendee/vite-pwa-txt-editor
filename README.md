@@ -17,7 +17,7 @@ Two goals drove this project:
 
 - **Open, create, save, and close `.txt` files** using the native [File System Access API](https://developer.mozilla.org/en-US/docs/Web/API/File_System_API) — no upload, no server round-trip
 - **Multiple files open at once** with a collapsible sidebar for switching between them
-- **Unsaved-changes indicator** — a small dot badge marks dirty files; the sidebar prompts for confirmation before closing them
+- **Unsaved-changes indicator** — a small dot badge marks dirty files; the sidebar prompts for confirmation before closing them; on mobile the active file name and dirty dot are also shown in the menu bar (screen-reader-only on desktop)
 - **Keyboard shortcuts** for every action:
 
   | Action        | Shortcut           |
