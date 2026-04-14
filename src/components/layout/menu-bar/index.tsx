@@ -27,6 +27,8 @@ import {
   SaveIcon,
   XIcon,
 } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { SiGithub } from "@icons-pack/react-simple-icons";
 
 const RootMenuBar = () => {
   const newFile = useNewFile();
@@ -46,14 +48,26 @@ const RootMenuBar = () => {
   const handleSave = () => {
     if (!activeFile) return;
     if (activeFile.handle) {
-      saveFileMutation.mutate({ id: activeFile.id, handle: activeFile.handle, content: activeFile.content });
+      saveFileMutation.mutate({
+        id: activeFile.id,
+        handle: activeFile.handle,
+        content: activeFile.content,
+      });
     } else {
-      saveFileAsMutation.mutate({ id: activeFile.id, content: activeFile.content, suggestedName: activeFile.name });
+      saveFileAsMutation.mutate({
+        id: activeFile.id,
+        content: activeFile.content,
+        suggestedName: activeFile.name,
+      });
     }
   };
   const handleSaveAs = () => {
     if (!activeFile) return;
-    saveFileAsMutation.mutate({ id: activeFile.id, content: activeFile.content, suggestedName: activeFile.name });
+    saveFileAsMutation.mutate({
+      id: activeFile.id,
+      content: activeFile.content,
+      suggestedName: activeFile.name,
+    });
   };
   const handleClose = () => closeFile();
   const handlePrev = () => navigatePrev();
@@ -63,49 +77,83 @@ const RootMenuBar = () => {
     <Menubar>
       <SidebarTrigger />
       <ModeToggle />
+      <Button
+        variant={"outline"}
+        size={"icon"}
+        render={
+          <a
+            href="https://github.com/nghiatm-twendee/vite-pwa-txt-editor"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <SiGithub />
+          </a>
+        }
+      />
       <MenubarMenu>
         <MenubarTrigger>File</MenubarTrigger>
         <MenubarContent className="min-w-64">
           <MenubarItem onClick={handleNew}>
             <FilePlusIcon /> New
-            <MenubarShortcut>{getShortcutDisplay({ action: FileAction.New }).join("+")}</MenubarShortcut>
-          </MenubarItem>
-          <MenubarItem disabled={openFileMutation.isPending} onClick={handleOpen}>
-            <FolderOpenIcon /> Open
-            <MenubarShortcut>{getShortcutDisplay({ action: FileAction.Open }).join("+")}</MenubarShortcut>
+            <MenubarShortcut>
+              {getShortcutDisplay({ action: FileAction.New }).join("+")}
+            </MenubarShortcut>
           </MenubarItem>
           <MenubarItem
-            disabled={!activeFile || saveFileMutation.isPending || saveFileAsMutation.isPending}
+            disabled={openFileMutation.isPending}
+            onClick={handleOpen}
+          >
+            <FolderOpenIcon /> Open
+            <MenubarShortcut>
+              {getShortcutDisplay({ action: FileAction.Open }).join("+")}
+            </MenubarShortcut>
+          </MenubarItem>
+          <MenubarItem
+            disabled={
+              !activeFile ||
+              saveFileMutation.isPending ||
+              saveFileAsMutation.isPending
+            }
             onClick={handleSave}
           >
             <SaveIcon /> Save
-            <MenubarShortcut>{getShortcutDisplay({ action: FileAction.Save }).join("+")}</MenubarShortcut>
+            <MenubarShortcut>
+              {getShortcutDisplay({ action: FileAction.Save }).join("+")}
+            </MenubarShortcut>
           </MenubarItem>
           <MenubarItem
             disabled={!activeFile || saveFileAsMutation.isPending}
             onClick={handleSaveAs}
           >
             <HardDriveDownloadIcon /> Save as
-            <MenubarShortcut>{getShortcutDisplay({ action: FileAction.SaveAs }).join("+")}</MenubarShortcut>
+            <MenubarShortcut>
+              {getShortcutDisplay({ action: FileAction.SaveAs }).join("+")}
+            </MenubarShortcut>
           </MenubarItem>
           <MenubarItem disabled={!activeFile} onClick={handleClose}>
             <XIcon /> Close
-            <MenubarShortcut>{getShortcutDisplay({ action: FileAction.Close }).join("+")}</MenubarShortcut>
+            <MenubarShortcut>
+              {getShortcutDisplay({ action: FileAction.Close }).join("+")}
+            </MenubarShortcut>
           </MenubarItem>
           <MenubarSeparator />
           <MenubarItem disabled={!canNavigate} onClick={handlePrev}>
             <ChevronUpIcon /> Previous File
-            <MenubarShortcut>{getShortcutDisplay({ action: FileAction.PrevFile }).join("+")}</MenubarShortcut>
+            <MenubarShortcut>
+              {getShortcutDisplay({ action: FileAction.PrevFile }).join("+")}
+            </MenubarShortcut>
           </MenubarItem>
           <MenubarItem disabled={!canNavigate} onClick={handleNext}>
             <ChevronDownIcon /> Next File
-            <MenubarShortcut>{getShortcutDisplay({ action: FileAction.NextFile }).join("+")}</MenubarShortcut>
+            <MenubarShortcut>
+              {getShortcutDisplay({ action: FileAction.NextFile }).join("+")}
+            </MenubarShortcut>
           </MenubarItem>
         </MenubarContent>
       </MenubarMenu>
       {activeFile && (
         <span
-          className="flex flex-1 min-w-0 items-center gap-1 px-1 md:sr-only"
+          className="flex min-w-0 flex-1 items-center gap-1 px-1 md:sr-only"
           title={activeFile.name}
         >
           <span className="truncate text-sm">{activeFile.name}</span>
