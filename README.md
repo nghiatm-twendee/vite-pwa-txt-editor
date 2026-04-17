@@ -22,15 +22,15 @@ Two goals drove this project:
 - **Unsaved-changes indicator** — a small dot badge marks dirty files; the sidebar prompts for confirmation before closing them; on mobile the active file name and dirty dot are also shown in the menu bar (screen-reader-only on desktop)
 - **Keyboard shortcuts** for every action:
 
-  | Action        | Shortcut           |
-  |---------------|--------------------|
-  | New file      | `Alt+N`            |
-  | Open file     | `Ctrl/⌘+O`         |
-  | Save          | `Ctrl/⌘+S`         |
-  | Save As       | `Ctrl/⌘+Shift+S`   |
-  | Close         | `Alt+W`            |
-  | Previous file | `Alt+↑`            |
-  | Next file     | `Alt+↓`            |
+  | Action        | Shortcut              |
+  |---------------|-----------------------|
+  | New file      | `Ctrl+Alt+N` / `⌘⌥N`  |
+  | Open file     | `Ctrl/⌘+O`            |
+  | Save          | `Ctrl/⌘+S`            |
+  | Save As       | `Ctrl/⌘+Shift+S`      |
+  | Close         | `Ctrl+Alt+W` / `⌘⌥W`  |
+  | Previous file | `Alt+↑`               |
+  | Next file     | `Alt+↓`               |
 
 - **Auto-focus textarea** after every file action so keyboard-only users never have to reach for the mouse
 - **Installable PWA** — add it to your home screen or desktop; it works fully offline via a Workbox service worker
@@ -41,7 +41,7 @@ Two goals drove this project:
 
 ## Interesting tidbits
 
-- **`Alt+W` instead of `Ctrl+W`** — `Ctrl/⌘+W` is browser-reserved and closes the tab even with `preventDefault`. `Alt+W` follows the same pattern as `Alt+N` (New) for non-overridable browser shortcuts.
+- **`Ctrl+Alt` / `⌘⌥` for New and Close** — `Ctrl/⌘+W` and `Ctrl/⌘+N` are browser-reserved (close tab / new window) and cannot be overridden. `Alt+N` and `Alt+W` were the original shortcuts, but `Option+letter` on macOS produces Unicode characters that get inserted into the editor. Using `Ctrl+Alt` on Windows and `⌘⌥` on Mac avoids both conflicts: browser shortcuts don't use these combos, and macOS never produces a character when `⌘` is held.
 - **Singleton ref for focus** — a module-level `{ current: HTMLTextAreaElement | null }` object in `focusable-textarea.tsx` lets hooks and sidebar components call `focusTextarea()` without threading refs through the component tree. `requestAnimationFrame` defers the focus call past the React render that mounts the textarea, handling new-file and open-file timing edge cases cleanly.
 - **No test suite yet** — the project is an MVP / learning sandbox. The type system and a manual smoke-test are the quality gates for now.
 
