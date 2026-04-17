@@ -20,11 +20,11 @@ export const FileAction = {
 export type FileAction = (typeof FileAction)[keyof typeof FileAction];
 
 const ACTION_HOTKEYS: Record<FileAction, string> = {
-  [FileAction.New]: "alt+n",
+  [FileAction.New]: "mod+alt+n",
   [FileAction.Open]: "mod+o",
   [FileAction.Save]: "mod+s",
   [FileAction.SaveAs]: "mod+shift+s",
-  [FileAction.Close]: "alt+w",
+  [FileAction.Close]: "mod+alt+w",
   [FileAction.PrevFile]: "alt+up",
   [FileAction.NextFile]: "alt+down",
 };
